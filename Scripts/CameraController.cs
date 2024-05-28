@@ -88,7 +88,7 @@ public class CameraController : MonoBehaviour
             transform.rotation = Quaternion.Euler(currentRotationX, currentRotationY, 0);
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             ResetCameraRotation();
         }
