@@ -9,6 +9,7 @@ public class Torch : Transistor
     void Start()
     {
         PowerOn();
+        SetNeighborOnId(-1);
     }
 
     // Update is called once per frame

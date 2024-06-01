@@ -19,15 +19,35 @@ public class Box : Transistor
         {
             if(t.GetIsOn())
             {
-                numberNeighborsOn += 1;
+                if(t is not Box)
+                {
+                    if(t is Torch torch)
+                    {
+                        if(torch.ConnectedBox != this)
+                        {
+                            numberNeighborsOn += 1;
+                            SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
+                        }
+                    }
+                    else
+                    {
+                        if(t.GetNeighborOnId()!=id) //Si le voisin n'est pas lui meme allumé grace a ce fil
+                        {
+                            numberNeighborsOn += 1;
+                            SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
+                        }
+                    }
+                }
+              
             }
-                
+              
         }
         if(numberNeighborsOn > 0)
         {
             PowerOn();
         }else{
             PowerOff();
+            SetNeighborOnId(-1);
         }
     }
 }

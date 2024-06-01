@@ -8,6 +8,7 @@ public class Lever : Transistor
     void Start()
     {
         PowerOff();
+        SetNeighborOnId(-1);
     }
 
     public void Turn()

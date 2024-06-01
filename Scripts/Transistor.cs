@@ -4,9 +4,33 @@ using UnityEngine;
 
 public class Transistor : MonoBehaviour
 {
+    ////
+    protected int id;
+    protected int neighborOnId;
+    ////
+    
     protected bool isOn;
     protected List<Transistor> neighbors = new List<Transistor>();
     protected Vector3 center = new Vector3(0f, 0f, 0f);
+
+    ////
+    public void SetId(int i)
+    {
+        id = i;
+    }
+    public int GetId()
+    {
+        return id;
+    }
+    public void SetNeighborOnId(int i)
+    {
+        neighborOnId = i;
+    }
+    public int GetNeighborOnId()
+    {
+        return neighborOnId;
+    }
+    ////
 
     public void SetCenter(Vector3 vect)
     {

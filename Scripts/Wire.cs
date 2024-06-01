@@ -21,7 +21,11 @@ public class Wire : Transistor
         {
             if(t.GetIsOn())
             {
-                numberNeighborsOn += 1;
+                if(t.GetNeighborOnId()!=id) //Si le voisin n'est pas lui meme allumé grace a ce fil
+                {
+                    numberNeighborsOn += 1;
+                    SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
+                }
             }
         }
 
@@ -30,6 +34,7 @@ public class Wire : Transistor
             PowerOn();
         }else{
             PowerOff();
+            SetNeighborOnId(-1);
         }
     }
     //quand on pose un fil sur une case, un point apparait au milieu de cette case puis on doit cliquer sur les cases voisines qui seront connectés a ce fil, pour changer on reclique sur le fil, et pour deselctionné on reclique sur les voisins

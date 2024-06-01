@@ -9,6 +9,7 @@ public class Button : Transistor
     void Start()
     {
         PowerOff();
+        SetNeighborOnId(-1);
     }
 
     public void Push()
@@ -24,5 +25,13 @@ public class Button : Transistor
     {
         yield return new WaitForSeconds(duration); // pdt duration, le programme peut continuer d'update autre part
         PowerOff();
+    }
+    public void SetPowerDuration(int duration)
+    {
+        powerDuration = duration;
+    }
+    public int GetPowerDuration()
+    {
+        return powerDuration;
     }
 }
