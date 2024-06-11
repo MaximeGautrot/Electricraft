@@ -10,7 +10,6 @@ public class CubeManager : MonoBehaviour
     public Vector3[,,] positionMatrix;
     private GameObject[,,] cubeMatrix;
     public GameObject redBall;
-    private Vector3Int previousBallPosition;
 
     void Start()
     {
@@ -24,8 +23,6 @@ public class CubeManager : MonoBehaviour
 
         InitializeCubeMatrix();
         PlaceCubes();
-
-        previousBallPosition = GetVector3IntBall();
     }
 
     void Update()
@@ -38,7 +35,6 @@ public class CubeManager : MonoBehaviour
             PlaceCubes();
         }
         UpdateCubeState();
-        previousBallPosition = GetVector3IntBall();
     }
 
     private Vector3Int GetVector3IntBall()
@@ -104,7 +100,6 @@ public class CubeManager : MonoBehaviour
         Vector3Int ballPositionInt = GetVector3IntBall();
 
         GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
-        GameObject lastCube = cubeMatrix[previousBallPosition.x, previousBallPosition.z, previousBallPosition.y];
         if (cube != null)
         {
             // Vérifier si la boule rouge est dans le cube actuel
@@ -112,25 +107,37 @@ public class CubeManager : MonoBehaviour
             {
                 // Remplacer le cube actuel par un nouveau cube
                 changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
-                Debug.Log("Oui");
 
                 // Arrêter la boucle, car la boule rouge est dans un cube
                 return;
             }
         }
 
-        if (lastCube != null)
+        int n1 = positionMatrix.GetLength(0);
+        int n2 = positionMatrix.GetLength(1);
+        int n3 = positionMatrix.GetLength(2);
+
+        for (int i = 0; i < n1; i++)
         {
-            if (ballPositionInt != previousBallPosition)
+            for (int j = 0; j < n2; j++)
             {
-                changeCubeToBasic(previousBallPosition.x, previousBallPosition.z, previousBallPosition.y);
+                for (int k = 0; k < n3; k++)
+                {
+                    if (cubeMatrix[i, j, k] != null)
+                    {
+                        if (new Vector3Int(i, k, j) != ballPositionInt && cubeMatrix[i, j, k].tag == "OnCube")
+                        {
+                            changeCubeToBasic(i, j, k);
+                        }
+                    }
+                }
             }
         }
     }
 
     void changeCubeToBasic(int x, int y, int z)
     {
-        Debug.Log("ChangeCubeAppeler");
+        Debug.Log("ChangeCubeAppelerBasic");
         if (x >= 0 && x < cubeMatrix.GetLength(0) &&
             y >= 0 && y < cubeMatrix.GetLength(1) &&
             z >= 0 && z < cubeMatrix.GetLength(2))
