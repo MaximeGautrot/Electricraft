@@ -112,7 +112,6 @@ public class CubeManager : MonoBehaviour
             {
                 // Remplacer le cube actuel par un nouveau cube
                 changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
-                Debug.Log("Oui");
 
                 // Arrêter la boucle, car la boule rouge est dans un cube
                 return;
@@ -130,7 +129,7 @@ public class CubeManager : MonoBehaviour
 
     void changeCubeToBasic(int x, int y, int z)
     {
-        Debug.Log("ChangeCubeAppeler");
+        Debug.Log("ChangeCubeAppelerBasic");
         if (x >= 0 && x < cubeMatrix.GetLength(0) &&
             y >= 0 && y < cubeMatrix.GetLength(1) &&
             z >= 0 && z < cubeMatrix.GetLength(2))
