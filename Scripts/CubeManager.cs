@@ -30,24 +30,24 @@ public class CubeManager : MonoBehaviour
 
     void Update()
     {
-        if (elecManager.GetN1() != positionMatrix.GetLength(0) && elecManager.GetN2() != positionMatrix.GetLength(1) && elecManager.GetN3() != positionMatrix.GetLength(2))
+        if (elecManager.GetN1() != positionMatrix.GetLength(0) || elecManager.GetN2() != positionMatrix.GetLength(1) || elecManager.GetN3() != positionMatrix.GetLength(2))
         {
             RemoveAllCubes();
             GetPositionMatrix();
             InitializeCubeMatrix();
             PlaceCubes();
-            UpdateCubeState();
-            previousBallPosition = GetVector3IntBall();
         }
+        UpdateCubeState();
+        previousBallPosition = GetVector3IntBall();
     }
 
     private Vector3Int GetVector3IntBall()
     {
         Vector3 ballPosition = redBall.transform.position;
 
-        int x = Mathf.FloorToInt(ballPosition.x / 20);
-        int y = Mathf.FloorToInt(ballPosition.y / 20);
-        int z = Mathf.FloorToInt(ballPosition.z / 20);
+        int x = Mathf.Abs(Mathf.FloorToInt((ballPosition.x + 10) / 20));
+        int y = Mathf.Abs(Mathf.FloorToInt((ballPosition.y + 10) / 20));
+        int z = Mathf.Abs(Mathf.FloorToInt((ballPosition.z + 10) / 20));
 
         return new Vector3Int(x, y, z);
     }
@@ -65,13 +65,9 @@ public class CubeManager : MonoBehaviour
                 for (int k = 0; k < n3; k++)
                 {
                     Vector3 position = positionMatrix[i, j, k];
-
-                    if (position != Vector3.zero)
-                    {
-                        GameObject cubeInstance = Instantiate(blenderCubePrefab, position, Quaternion.identity);
-                        cubeInstance.transform.SetParent(transform);
-                        cubeMatrix[i, j, k] = cubeInstance;
-                    }
+                    GameObject cubeInstance = Instantiate(blenderCubePrefab, position, Quaternion.identity);
+                    cubeInstance.transform.SetParent(transform);
+                    cubeMatrix[i, j, k] = cubeInstance;
                 }
             }
         }
@@ -102,33 +98,32 @@ public class CubeManager : MonoBehaviour
 
     void UpdateCubeState()
     {
-    // Récupérer la position de la boule rouge
-    Vector3 ballPosition = redBall.transform.position;
+        // Récupérer la position de la boule rouge
+        Vector3 ballPosition = redBall.transform.position;
 
-    Vector3Int ballPositionInt = GetVector3IntBall();
+        Vector3Int ballPositionInt = GetVector3IntBall();
 
-    // Vérifier si la boule rouge est dans un cube
-    GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.y, ballPositionInt.z];
+        GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
+        GameObject lastCube = cubeMatrix[previousBallPosition.x, previousBallPosition.z, previousBallPosition.y];
         if (cube != null)
         {
             // Vérifier si la boule rouge est dans le cube actuel
             if (cube.tag == "BasicCube")
             {
                 // Remplacer le cube actuel par un nouveau cube
-                changeCube(ballPositionInt.x, ballPositionInt.y, ballPositionInt.z);
+                changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
                 Debug.Log("Oui");
 
                 // Arrêter la boucle, car la boule rouge est dans un cube
                 return;
             }
-            else if (cube.tag == "OnCube")
-            {
-                // Remplacer le cube actuel par un cube basique
-                changeCubeToBasic(ballPositionInt.x, ballPositionInt.y, ballPositionInt.z);
-                Debug.Log("Oui");
+        }
 
-                // Arrêter la boucle, car la boule rouge est dans un cube
-                return;
+        if (lastCube != null)
+        {
+            if (ballPositionInt != previousBallPosition)
+            {
+                changeCubeToBasic(previousBallPosition.x, previousBallPosition.z, previousBallPosition.y);
             }
         }
     }
