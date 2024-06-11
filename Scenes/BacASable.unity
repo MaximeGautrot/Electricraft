@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.172768, g: 0.21589169, b: 0.29782546, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Bienvenue dans ce tutoriel qui vous apprendra \xE0 utiliser les objets
+  m_text: "\nBIENVENUE !!\n\nCe tutoriel vous apprendra \xE0 utiliser les objets
     disponibles dans le jeu. Nous allons vous guider \xE9tape par \xE9tape \xE0 travers
     diff\xE9rents niveaux pour comprendre et ma\xEEtriser les concepts de base de
     l'\xE9lectricit\xE9. Suivez attentivement les instructions et amusez-vous !\r\n\r\n\r\nNIVEAU
@@ -280,7 +280,7 @@ MonoBehaviour:
     reprend tous les \xE9l\xE9ments que nous venons de faire. R\xE9aliser le niveau
     7 (L\u2019additionneur) puis utiliser le convertisseur vers d\xE9cimal pour retrouver
     le r\xE9sultat en d\xE9cimal. Enfin ajoutez 2 \xE9crans pour pouvoir visualiser
-    un nombre \xE0 2 chiffres et reliez le r\xE9sultat du convertisseur aux \xE9crans.\r\n\r\n\nFIN\r\n\nBravo,
+    un nombre \xE0 2 chiffres et reliez le r\xE9sultat du convertisseur aux \xE9crans.\r\n\r\n\nFIN\r\n\nBRAVO,
     vous avez termin\xE9 le tutoriel ! Vous \xEAtes maintenant pr\xEAt \xE0 cr\xE9er
     des circuits \xE9lectriques complexes dans votre jeu. Bonne chance et amusez-vous
     bien !\r"
@@ -4863,3 +4863,4 @@ SceneRoots:
   - {fileID: 1168456116}
   - {fileID: 2132514173}
   - {fileID: 2007914710}
+  - {fileID: 558113491}
