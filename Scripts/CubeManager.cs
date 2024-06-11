@@ -10,7 +10,6 @@ public class CubeManager : MonoBehaviour
     public Vector3[,,] positionMatrix;
     private GameObject[,,] cubeMatrix;
     public GameObject redBall;
-    private Vector3Int previousBallPosition;
 
     void Start()
     {
@@ -24,8 +23,6 @@ public class CubeManager : MonoBehaviour
 
         InitializeCubeMatrix();
         PlaceCubes();
-
-        previousBallPosition = GetVector3IntBall();
     }
 
     void Update()
@@ -38,7 +35,6 @@ public class CubeManager : MonoBehaviour
             PlaceCubes();
         }
         UpdateCubeState();
-        previousBallPosition = GetVector3IntBall();
     }
 
     private Vector3Int GetVector3IntBall()
@@ -104,7 +100,6 @@ public class CubeManager : MonoBehaviour
         Vector3Int ballPositionInt = GetVector3IntBall();
 
         GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
-        GameObject lastCube = cubeMatrix[previousBallPosition.x, previousBallPosition.z, previousBallPosition.y];
         if (cube != null)
         {
             // Vérifier si la boule rouge est dans le cube actuel
@@ -118,11 +113,24 @@ public class CubeManager : MonoBehaviour
             }
         }
 
-        if (lastCube != null)
+        int n1 = positionMatrix.GetLength(0);
+        int n2 = positionMatrix.GetLength(1);
+        int n3 = positionMatrix.GetLength(2);
+
+        for (int i = 0; i < n1; i++)
         {
-            if (ballPositionInt != previousBallPosition)
+            for (int j = 0; j < n2; j++)
             {
-                changeCubeToBasic(previousBallPosition.x, previousBallPosition.z, previousBallPosition.y);
+                for (int k = 0; k < n3; k++)
+                {
+                    if (cubeMatrix[i, j, k] != null)
+                    {
+                        if (new Vector3Int(i, k, j) != ballPositionInt && cubeMatrix[i, j, k].tag == "OnCube")
+                        {
+                            changeCubeToBasic(i, j, k);
+                        }
+                    }
+                }
             }
         }
     }
