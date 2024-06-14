@@ -40,16 +40,15 @@ public class ElecManager : MonoBehaviour
                 {
                     if (matrixTransistors[i, j, k] != null)
                     {
-                        Debug.Log(MatrixElements);
+                        string element = matrixElements[i, j, k].GetType().Name + "Off";
+                        Debug.Log(element);
                         if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
                         {
-                            string element = matrixElements[i, j, k].GetType().Name + "Off";
                             Destroy(matrixElements[i, j, k]);
                             matrixElements[i, j, k] = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                         }
                         else if (matrixElements[i, j, k].tag == "Off" && !matrixTransistors[i, j, k].GetIsOn())
                         {
-                            string element = matrixElements[i, j, k].GetType().Name + "On";
                             Destroy(matrixElements[i, j, k]);
                             matrixElements[i, j, k] = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                         }
@@ -283,10 +282,7 @@ public class ElecManager : MonoBehaviour
     {
         Destroy(matrixTransistors[i, j, k]);
         Destroy(matrixElements[i, j, k]);
-        Vector3 center = new Vector3(i * 20f, k * 20f, j * 20f);
-        Transistor transistor = new GameObject("Transistor").AddComponent<Transistor>();
-        transistor.SetCenter(center);
-        matrixTransistors[i, j, k] = transistor;
+        matrixTransistors[i, j, k] = null;
         matrixElements[i, j, k] = null;
     }
 
