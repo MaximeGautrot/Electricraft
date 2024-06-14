@@ -33,15 +33,15 @@ public class Lamp : Transistor
         }
     }
     
-    public virtual void LightOn()
+    public void LightOn()
     {
         lightIsOn = true;
     }
-    public virtual void LightOff()
+    public void LightOff()
     {
         lightIsOn = false;
     }
-    public bool GetLightIsOn()
+    public override bool GetLightIsOn()
     {
         return lightIsOn;
     }

@@ -16,6 +16,7 @@ public class ElecManager : MonoBehaviour
     // Start is called before the first frame update
     public ObjectSelected objectSelected;
     public CubeManager cubeManager;
+    public List<GameObject> wireManager;
 
     void Start()
     {
@@ -28,8 +29,8 @@ public class ElecManager : MonoBehaviour
     void Update()
     {
         HandleInput();
+        VerifierVoisins();
         UpdateVisu();
-        
     }
 
     void UpdateVisu()
@@ -51,23 +52,110 @@ public class ElecManager : MonoBehaviour
                         {
                             element = matrixTransistors[i, j, k].GetType().Name;
                         }
-                        if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
+                        if (element == "Lamp")
                         {
-                            element = element+"Off";
-                            Destroy(matrixElements[i, j, k]);
-                            matrixElements[i, j, k] = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
+                            if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetLightIsOn())
+                            {
+                                element = element+"Off";
+                                Destroy(matrixElements[i, j, k]);
+                                GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
+                                elt.transform.SetParent(transform);
+                                matrixElements[i, j, k] = elt;
+                                DeleteGameObjectListeWire();
+                                PlaceWire();
+                            }
+                            else if (matrixElements[i, j, k].tag == "Off" && matrixTransistors[i, j, k].GetLightIsOn())
+                            {
+                                element = element+"On";
+                                Destroy(matrixElements[i, j, k]);
+                                GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
+                                elt.transform.SetParent(transform);
+                                matrixElements[i, j, k] = elt;
+                                DeleteGameObjectListeWire();
+                                PlaceWire();
+                            } 
                         }
-                        else if (matrixElements[i, j, k].tag == "Off" && !matrixTransistors[i, j, k].GetIsOn())
+                        else
                         {
-                            element = element+"On";
-                            Destroy(matrixElements[i, j, k]);
-                            matrixElements[i, j, k] = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
+                            if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
+                            {
+                                element = element+"Off";
+                                Destroy(matrixElements[i, j, k]);
+                                GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
+                                elt.transform.SetParent(transform);
+                                matrixElements[i, j, k] = elt;
+                                DeleteGameObjectListeWire();
+                                PlaceWire();
+                            }
+                            else if (matrixElements[i, j, k].tag == "Off" && matrixTransistors[i, j, k].GetIsOn())
+                            {
+                                element = element+"On";
+                                Destroy(matrixElements[i, j, k]);
+                                GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
+                                elt.transform.SetParent(transform);
+                                matrixElements[i, j, k] = elt;
+                                DeleteGameObjectListeWire();
+                                PlaceWire();
+                            }
                         }
-                        Debug.Log(element);
-                        Debug.log(matrixTransistors[i, j, k].GetNeighbors());
                     }
                 }
             }
+        }
+    }
+
+    void PlaceWire()
+    {
+        for (int i = 0; i < n1; i++)
+        {
+            for (int j = 0; j < n2; j++)
+            {
+                for (int k = 0; k < n3; k++)
+                {
+                    if (matrixTransistors[i, j, k] != null)
+                    {
+                        List<Vector3> listeVect = GetDirectionVoisins(i, j, k);
+                        Quaternion rota;
+                        foreach(Vector3 vect in listeVect)
+                        {
+                            if (vect.x != 0)
+                            {
+                                rota = Quaternion.Euler(90, 0, 0);
+                            }
+                            else if (vect.y != 0)
+                            {
+                                rota = Quaternion.Euler(0, 0, 90);
+                            }
+                            else
+                            {
+                                rota = Quaternion.Euler(0, 90, 0);
+                            }
+                            if(matrixTransistors[i, j, k].GetIsOn() || matrixTransistors[i, j, k].GetLightIsOn())
+                            {
+                                GameObject elt = Instantiate(objectSelected.GetElement("WireOn"), matrixTransistors[i, j, k].GetCenter() + vect*5f, rota);
+                                elt.transform.SetParent(transform);
+                                wireManager.Add(elt);
+                            }
+                            else
+                            {
+                                GameObject elt = Instantiate(objectSelected.GetElement("WireOff"), matrixTransistors[i, j, k].GetCenter() + vect*5f, rota);
+                                elt.transform.SetParent(transform);
+                                wireManager.Add(elt);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void DeleteGameObjectListeWire()
+    {
+        for (int i = wireManager.Count - 1; i >= 0; i--)
+        {
+            GameObject gameObject = wireManager[i];
+            wireManager.RemoveAt(i);
+            Destroy(gameObject);
         }
     }
 
@@ -91,6 +179,30 @@ public class ElecManager : MonoBehaviour
                 DeleteTransistor(position.x, position.z, position.y);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Vector3Int position = cubeManager.GetVector3IntBall();
+            ActiverElement(position.x, position.z, position.y);
+        }
+    }
+
+    void ActiverElement(int i, int j, int k)
+    {
+        Transistor t = matrixTransistors[i, j, k];
+        if (t != null)
+        {
+            string nom = t.GetType().Name;
+
+            if(nom == "Lever")
+            {
+                t.Turn();
+            }
+            else if (nom == "Button")
+            {
+                t.Push();
+            }
+        }
     }
 
     private void AddElement(int i, int j, int k, string element)
@@ -103,7 +215,9 @@ public class ElecManager : MonoBehaviour
             matrixElements[i, j, k] = elt;
 
             addTransistor(i, j, k, element);
-            VerifierVoisins();
+
+            DeleteGameObjectListeWire();
+            PlaceWire();
         }
     }
 
@@ -309,6 +423,9 @@ public class ElecManager : MonoBehaviour
         Destroy(matrixElements[i, j, k]);
         matrixTransistors[i, j, k] = null;
         matrixElements[i, j, k] = null;
+
+        DeleteGameObjectListeWire();
+        PlaceWire();
     }
 
     public List<Transistor> VisiterVoisins(int i, int j, int k)
@@ -336,6 +453,32 @@ public class ElecManager : MonoBehaviour
         }
 
         return voisins;
+    }
+
+    public List<Vector3> GetDirectionVoisins(int i, int j, int k)
+    {
+        List<Vector3> output = new List<Vector3>();
+        int[,] directions = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
+
+        // Parcourez tous les déplacements possibles
+        for (int d = 0; d < directions.GetLength(0); d++)
+        {
+            // Calculez les coordonnées du voisin
+            int x = i + directions[d, 0];
+            int y = j + directions[d, 1];
+            int z = k + directions[d, 2];
+
+            // Vérifiez que les coordonnées du voisin sont dans les limites de la matrice
+            if (x >= 0 && x < matrixTransistors.GetLength(0) && y >= 0 && y < matrixTransistors.GetLength(1) && z >= 0 && z < matrixTransistors.GetLength(2))
+            {
+                if (matrixTransistors[x, y, z] != null)
+                {
+                    output.Add(new Vector3(directions[d, 0], directions[d, 2], directions[d, 1]));
+                }
+            }
+        }
+
+        return output;
     }
 
 }

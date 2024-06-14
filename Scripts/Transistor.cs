@@ -66,7 +66,7 @@ public class Transistor : MonoBehaviour
 
         foreach (Transistor n  in neighbors)
         {
-            if (!neighbors.Contains(n))
+            if (!listeNeighbors.Contains(n))
             {
                 neighbors.Remove(n);
             }
@@ -98,12 +98,26 @@ public class Transistor : MonoBehaviour
     {
         return isOn;
     }
+
+    public virtual bool GetLightIsOn()
+    {
+        return false;
+    }
+
+    public virtual void Turn()
+    {
+
+    }
+
+    public virtual void Push()
+    {
+        
+    }
     
     public bool IsNeighborInList(Transistor neighbor)
     {
         return neighbors.Contains(neighbor);
     }
-
     // Start is called before the first frame update
     void Start()
     {

@@ -12,7 +12,7 @@ public class Button : Transistor
         SetNeighborOnId(-1);
     }
 
-    public void Push()
+    public override void Push()
     {
         if(!(GetIsOn()))
         {

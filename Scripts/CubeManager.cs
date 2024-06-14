@@ -104,20 +104,18 @@ public class CubeManager : MonoBehaviour
         int n2 = positionMatrix.GetLength(1);
         int n3 = positionMatrix.GetLength(2);
 
-        if (0 <= ballPosition.x && ballPosition.x < n1 && 0 <= ballPosition.z && ballPosition.z < n2 && 0 <= ballPosition.y && ballPosition.y < n3)
+        
+        GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
+        if (cube != null)
         {
-            GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
-            if (cube != null)
+            // Vérifier si la boule rouge est dans le cube actuel
+            if (cube.tag == "BasicCube")
             {
-                // Vérifier si la boule rouge est dans le cube actuel
-                if (cube.tag == "BasicCube")
-                {
-                    // Remplacer le cube actuel par un nouveau cube
-                    changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
+                // Remplacer le cube actuel par un nouveau cube
+                changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
 
-                    // Arrêter la boucle, car la boule rouge est dans un cube
-                    return;
-                }
+                // Arrêter la boucle, car la boule rouge est dans un cube
+                return;
             }
         }
 
@@ -141,6 +139,7 @@ public class CubeManager : MonoBehaviour
 
     void changeCubeToBasic(int x, int y, int z)
     {
+        Debug.Log("changeBasic");
         if (x >= 0 && x < cubeMatrix.GetLength(0) &&
             y >= 0 && y < cubeMatrix.GetLength(1) &&
             z >= 0 && z < cubeMatrix.GetLength(2))
@@ -170,6 +169,7 @@ public class CubeManager : MonoBehaviour
 
     void changeCube(int x, int y, int z)
     {
+        Debug.Log("changeOn");
         if (x >= 0 && x < cubeMatrix.GetLength(0) &&
             y >= 0 && y < cubeMatrix.GetLength(1) &&
             z >= 0 && z < cubeMatrix.GetLength(2))

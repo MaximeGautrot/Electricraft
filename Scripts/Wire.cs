@@ -17,7 +17,7 @@ public class Wire : Transistor
     {
         uint numberNeighborsOn = 0;
 
-        foreach (Transistor t in connectedNeighbors)
+        foreach (Transistor t in neighbors)
         {
             if(t.GetIsOn())
             {

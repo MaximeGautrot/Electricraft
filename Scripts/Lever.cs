@@ -11,7 +11,7 @@ public class Lever : Transistor
         SetNeighborOnId(-1);
     }
 
-    public void Turn()
+    public override void Turn()
     {
         if(GetIsOn())
         {

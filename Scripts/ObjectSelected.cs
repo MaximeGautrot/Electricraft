@@ -164,7 +164,7 @@ public class ObjectSelected : MonoBehaviour
         }
         if (element == "LampOn")
         {
-            return LampOff;
+            return LampOn;
         }
         if (element == "CubeTOn")
         {
