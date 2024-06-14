@@ -93,4 +93,17 @@ public class CameraController : MonoBehaviour
             ResetCameraRotation();
         }
     }
+
+    //bof car supprime pas la boule rouge et les fonctions de la boule rouge ne s'apllique plus(box bleu)
+    public void ChangeObject(GameObject newObject)
+    {
+        if (newObject != null)
+        {
+            redBall = newObject;
+        }
+        else
+        {
+            Debug.LogWarning("Trying to assign null as redBall.");
+        }
+    }
 }
