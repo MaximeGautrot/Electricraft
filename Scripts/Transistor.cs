@@ -30,6 +30,11 @@ public class Transistor : MonoBehaviour
     {
         return neighborOnId;
     }
+
+    public List<Transistor> GetNeighbors()
+    {
+        return neighbors;
+    }
     ////
 
     public void SetCenter(Vector3 vect)

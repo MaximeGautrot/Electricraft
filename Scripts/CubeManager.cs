@@ -100,23 +100,26 @@ public class CubeManager : MonoBehaviour
 
         Vector3Int ballPositionInt = GetVector3IntBall();
 
-        GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
-        if (cube != null)
-        {
-            // Vérifier si la boule rouge est dans le cube actuel
-            if (cube.tag == "BasicCube")
-            {
-                // Remplacer le cube actuel par un nouveau cube
-                changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
-
-                // Arrêter la boucle, car la boule rouge est dans un cube
-                return;
-            }
-        }
-
         int n1 = positionMatrix.GetLength(0);
         int n2 = positionMatrix.GetLength(1);
         int n3 = positionMatrix.GetLength(2);
+
+        if (0 <= ballPosition.x && ballPosition.x < n1 && 0 <= ballPosition.z && ballPosition.z < n2 && 0 <= ballPosition.y && ballPosition.y < n3)
+        {
+            GameObject cube = cubeMatrix[ballPositionInt.x, ballPositionInt.z, ballPositionInt.y];
+            if (cube != null)
+            {
+                // Vérifier si la boule rouge est dans le cube actuel
+                if (cube.tag == "BasicCube")
+                {
+                    // Remplacer le cube actuel par un nouveau cube
+                    changeCube(ballPositionInt.x, ballPositionInt.z, ballPositionInt.y);
+
+                    // Arrêter la boucle, car la boule rouge est dans un cube
+                    return;
+                }
+            }
+        }
 
         for (int i = 0; i < n1; i++)
         {
@@ -138,7 +141,6 @@ public class CubeManager : MonoBehaviour
 
     void changeCubeToBasic(int x, int y, int z)
     {
-        Debug.Log("ChangeCubeAppelerBasic");
         if (x >= 0 && x < cubeMatrix.GetLength(0) &&
             y >= 0 && y < cubeMatrix.GetLength(1) &&
             z >= 0 && z < cubeMatrix.GetLength(2))
@@ -168,7 +170,6 @@ public class CubeManager : MonoBehaviour
 
     void changeCube(int x, int y, int z)
     {
-        Debug.Log("ChangeCubeAppeler");
         if (x >= 0 && x < cubeMatrix.GetLength(0) &&
             y >= 0 && y < cubeMatrix.GetLength(1) &&
             z >= 0 && z < cubeMatrix.GetLength(2))

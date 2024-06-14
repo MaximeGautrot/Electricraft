@@ -8,6 +8,8 @@ public class ElecManager : MonoBehaviour
     public int n2 = 5;
     public int n3 = 3;
 
+    private int currentId = 0;
+
     public Transistor[,,] matrixTransistors = null;
     public GameObject[,,] matrixElements = null;
     public Vector3[,,] matrixVect;
@@ -40,18 +42,29 @@ public class ElecManager : MonoBehaviour
                 {
                     if (matrixTransistors[i, j, k] != null)
                     {
-                        string element = matrixElements[i, j, k].GetType().Name + "Off";
-                        Debug.Log(element);
+                        string element;
+                        if (matrixTransistors[i, j, k].GetType().Name == "Box")
+                        {
+                            element = "CubeT";
+                        }
+                        else
+                        {
+                            element = matrixTransistors[i, j, k].GetType().Name;
+                        }
                         if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
                         {
+                            element = element+"Off";
                             Destroy(matrixElements[i, j, k]);
                             matrixElements[i, j, k] = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                         }
                         else if (matrixElements[i, j, k].tag == "Off" && !matrixTransistors[i, j, k].GetIsOn())
                         {
+                            element = element+"On";
                             Destroy(matrixElements[i, j, k]);
                             matrixElements[i, j, k] = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                         }
+                        Debug.Log(element);
+                        Debug.log(matrixTransistors[i, j, k].GetNeighbors());
                     }
                 }
             }
@@ -60,7 +73,7 @@ public class ElecManager : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             Vector3Int position = cubeManager.GetVector3IntBall();
             string element = objectSelected.GetCurrentElement();
@@ -244,36 +257,48 @@ public class ElecManager : MonoBehaviour
         {
             Torch torch = new GameObject("Torch").AddComponent<Torch>();
             torch.SetCenter(center);
+            torch.SetId(currentId);
+            currentId++;
             matrixTransistors[i, j, k] = torch;
         }
         else if (element == "Wire")
         {
             Wire wire = new GameObject("Wire").AddComponent<Wire>();
             wire.SetCenter(center);
+            wire.SetId(currentId);
+            currentId++;
             matrixTransistors[i, j, k] = wire;
         }
         else if (element == "Button")
         {
             Button button = new GameObject("Button").AddComponent<Button>();
             button.SetCenter(center);
+            button.SetId(currentId);
+            currentId++;
             matrixTransistors[i, j, k] = button;
         }
         else if (element == "Lever")
         {
             Lever lever = new GameObject("Lever").AddComponent<Lever>();
             lever.SetCenter(center);
+            lever.SetId(currentId);
+            currentId++;
             matrixTransistors[i, j, k] = lever;
         }
         else if (element == "Lamp")
         {
             Lamp lamp = new GameObject("Lamp").AddComponent<Lamp>();
             lamp.SetCenter(center);
+            lamp.SetId(currentId);
+            currentId++;
             matrixTransistors[i, j, k] = lamp;
         }
         else if (element == "CubeT")
         {
             Box cubeT = new GameObject("Box").AddComponent<Box>();
             cubeT.SetCenter(center);
+            cubeT.SetId(currentId);
+            currentId++;
             matrixTransistors[i, j, k] = cubeT;
         }
     }
