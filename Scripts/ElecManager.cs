@@ -40,6 +40,7 @@ public class ElecManager : MonoBehaviour
                 {
                     if (matrixTransistors[i, j, k] != null)
                     {
+                        Debug.Log(MatrixElements);
                         if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
                         {
                             string element = matrixElements[i, j, k].GetType().Name + "Off";
