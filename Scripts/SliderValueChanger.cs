@@ -26,6 +26,11 @@ public class SliderValueChanger : MonoBehaviour
         UpdateSliderValueText(); // Ajoutez cette ligne
     }
 
+    void Update()
+    {
+        UpdateSliderValueText();
+    }
+
     void ValueChangeCheck1()
     {
         elecManager.SetMyValue1(Mathf.RoundToInt(slider1.value));

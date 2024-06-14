@@ -9,7 +9,8 @@ public class CubeManager : MonoBehaviour
     public ElecManager elecManager;
     public Vector3[,,] positionMatrix;
     private GameObject[,,] cubeMatrix;
-    public GameObject redBall;
+
+    public CameraController cameraController;
 
     void Start()
     {
@@ -37,13 +38,13 @@ public class CubeManager : MonoBehaviour
         UpdateCubeState();
     }
 
-    private Vector3Int GetVector3IntBall()
+    public Vector3Int GetVector3IntBall()
     {
-        Vector3 ballPosition = redBall.transform.position;
+        Vector3 ballPosition = cameraController.GetPositionRedBall();
 
-        int x = Mathf.Abs(Mathf.FloorToInt((ballPosition.x + 10) / 20));
-        int y = Mathf.Abs(Mathf.FloorToInt((ballPosition.y + 10) / 20));
-        int z = Mathf.Abs(Mathf.FloorToInt((ballPosition.z + 10) / 20));
+        int x = Mathf.FloorToInt((ballPosition.x + 10) / 20);
+        int y = Mathf.FloorToInt((ballPosition.y + 10) / 20);
+        int z = Mathf.FloorToInt((ballPosition.z + 10) / 20);
 
         return new Vector3Int(x, y, z);
     }
@@ -95,7 +96,7 @@ public class CubeManager : MonoBehaviour
     void UpdateCubeState()
     {
         // Récupérer la position de la boule rouge
-        Vector3 ballPosition = redBall.transform.position;
+        Vector3 ballPosition = cameraController.GetPositionRedBall();
 
         Vector3Int ballPositionInt = GetVector3IntBall();
 

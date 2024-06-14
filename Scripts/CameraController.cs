@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float moveSpeed = 10.0f;
-    public float zoomSpeed = 5.0f;
+    public float zoomSpeed = 10.0f;
     public float minZoom = 1.0f;
     public float maxZoom = 50.0f;
     public float rotateSpeed = 50.0f;
@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
     private Vector3 mouseStartPosition;
 
     public float distance = 10f;
-    public GameObject redBall;
+    public Vector3 positionRedBall;
 
     void Start()
     {
@@ -33,10 +33,7 @@ public class CameraController : MonoBehaviour
         HandleInput();
 
         // Mettre à jour la position de la boule rouge
-        if (redBall != null)
-        {
-            redBall.transform.position = transform.position + transform.forward * distance;
-        }
+        positionRedBall = transform.position + transform.forward * distance;
     }
 
     public void ResetCameraRotation()
@@ -62,7 +59,6 @@ public class CameraController : MonoBehaviour
         {
             currentZoom -= zoomSpeed * Time.deltaTime;
         }
-        currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
         transform.position = new Vector3(transform.position.x, currentZoom, transform.position.z);
 
         // Look up, down, left, and right with the right mouse button
@@ -81,7 +77,6 @@ public class CameraController : MonoBehaviour
             float rotateY = mouseDelta.x * rotateSpeed * Time.deltaTime;
 
             currentRotationX += rotateX;
-            currentRotationX = Mathf.Clamp(currentRotationX, minRotationX, maxRotationX);
 
             currentRotationY += rotateY;
 
@@ -92,5 +87,10 @@ public class CameraController : MonoBehaviour
         {
             ResetCameraRotation();
         }
+    }
+
+    public Vector3 GetPositionRedBall()
+    {
+        return positionRedBall;
     }
 }

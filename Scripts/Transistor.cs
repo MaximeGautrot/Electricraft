@@ -43,12 +43,39 @@ public class Transistor : MonoBehaviour
 
     public void AddNeighbor(Transistor neighbor)
     {
-        neighbors.Add(neighbor);
+        if (!IsNeighborInList(neighbor))
+        {
+            neighbors.Add(neighbor);
+        }
     }
+
+    public void AddNeighborListe(List<Transistor> listeNeighbors)
+    {
+        foreach (Transistor n in listeNeighbors)
+        {
+            if (!IsNeighborInList(n))
+            {
+                neighbors.Add(n);
+            }
+        }
+
+        foreach (Transistor n  in neighbors)
+        {
+            if (!neighbors.Contains(n))
+            {
+                neighbors.Remove(n);
+            }
+        }
+    }
+
     public void DeleteNeighbor(Transistor neighbor)
     {
-        neighbors.Remove(neighbor);
+        if (IsNeighborInList(neighbor))
+        {
+            neighbors.Remove(neighbor);
+        }
     }
+
     public List<Transistor> GetNeighbor()
     {
         return neighbors;
@@ -67,6 +94,10 @@ public class Transistor : MonoBehaviour
         return isOn;
     }
     
+    public bool IsNeighborInList(Transistor neighbor)
+    {
+        return neighbors.Contains(neighbor);
+    }
 
     // Start is called before the first frame update
     void Start()
