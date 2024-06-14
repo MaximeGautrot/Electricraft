@@ -338,6 +338,7 @@ public class ElecManager : MonoBehaviour
     {
         DestroyTransistorMatrix();
         DestroyGameObjectMatrix();
+        DeleteGameObjectListeWire();
         n1 = Mathf.RoundToInt(value);
         matrixTransistors = GenerateTransistorMatrix();
         matrixVect = GenerateVectorMatrix();
@@ -347,6 +348,7 @@ public class ElecManager : MonoBehaviour
     {
         DestroyTransistorMatrix();
         DestroyGameObjectMatrix();
+        DeleteGameObjectListeWire();
         n2 = Mathf.RoundToInt(value);;
         matrixTransistors = GenerateTransistorMatrix();
         matrixVect = GenerateVectorMatrix();
@@ -356,6 +358,7 @@ public class ElecManager : MonoBehaviour
     {
         DestroyTransistorMatrix();
         DestroyGameObjectMatrix();
+        DeleteGameObjectListeWire();
         n3 = Mathf.RoundToInt(value);;
         matrixTransistors = GenerateTransistorMatrix();
         matrixVect = GenerateVectorMatrix();
