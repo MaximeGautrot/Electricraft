@@ -2810,6 +2810,7 @@ MonoBehaviour:
   redBall: {fileID: 5639455585832965390, guid: e89822e5cd506684399785f6df1cf64b, type: 3}
   cameraController: {fileID: 609276280}
   currentElement: 
+  leaveButton: {fileID: 1090916401}
 --- !u!1 &435357258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3107,6 +3108,9 @@ MonoBehaviour:
   objectSelected: {fileID: 428799507}
   cubeManager: {fileID: 1051092014}
   wireManager: []
+  delaySlider: {fileID: 1090916401}
+  boxInfo: {fileID: 0}
+  leaveButton: {fileID: 1090916401}
 --- !u!4 &458846287
 Transform:
   m_ObjectHideFlags: 0
@@ -8538,6 +8542,7 @@ GameObject:
   - component: {fileID: 1729076480}
   - component: {fileID: 1729076479}
   - component: {fileID: 1729076478}
+  - component: {fileID: 1729076481}
   m_Layer: 5
   m_Name: LeaveButton
   m_TagString: Untagged
@@ -8608,7 +8613,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1729076479}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1729076481}
+        m_TargetAssemblyTypeName: LeaveButton, Assembly-CSharp
+        m_MethodName: LeaveButtonVisibility
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1729076479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8647,6 +8664,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729076476}
   m_CullTransparentMesh: 1
+--- !u!114 &1729076481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729076476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4c20de098ef604daa2cb8afb0c647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leaveButton: {fileID: 1090916401}
 --- !u!1 &1732325097
 GameObject:
   m_ObjectHideFlags: 0
