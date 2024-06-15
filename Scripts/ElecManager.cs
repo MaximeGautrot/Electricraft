@@ -13,11 +13,15 @@ public class ElecManager : MonoBehaviour
     public Transistor[,,] matrixTransistors = null;
     public GameObject[,,] matrixElements = null;
     public Vector3[,,] matrixVect;
-    // Start is called before the first frame update
+
     public ObjectSelected objectSelected;
     public CubeManager cubeManager;
     public List<GameObject> wireManager;
+    public GameObject delaySlider;
+    public GameObject boxInfo;
+    public GameObject leaveButton;
 
+    // Start is called before the first frame update
     void Start()
     {
         matrixTransistors = GenerateTransistorMatrix();
@@ -176,6 +180,7 @@ public class ElecManager : MonoBehaviour
             Vector3Int position = cubeManager.GetVector3IntBall();
             if (matrixElements[position.x, position.z, position.y] != null)
             {
+                leaveButton.SetActive(false);
                 DeleteTransistor(position.x, position.z, position.y);
             }
         }
@@ -213,6 +218,23 @@ public class ElecManager : MonoBehaviour
             GameObject elt = Instantiate(objectSelected.GetElement(element), position, Quaternion.identity);
             elt.transform.SetParent(transform);
             matrixElements[i, j, k] = elt;
+
+            if (element == "Button" || element == "Relay")
+            {
+                delaySlider.gameObject.SetActive(true);
+            }
+            else
+            {
+                delaySlider.gameObject.SetActive(false);
+            }
+            if (element == "Torch")
+            {
+                boxInfo.gameObject.SetActive(true);
+            }
+            else
+            {
+                boxInfo.gameObject.SetActive(false);
+            }
 
             addTransistor(i, j, k, element);
 

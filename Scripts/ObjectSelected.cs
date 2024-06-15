@@ -27,6 +27,8 @@ public class ObjectSelected : MonoBehaviour
 
     public string currentElement;
 
+    public GameObject leaveButton;
+
     void Start()
     {
         printElement  = Instantiate(redBall, cameraController.GetPositionRedBall(), Quaternion.identity);;
@@ -51,6 +53,7 @@ public class ObjectSelected : MonoBehaviour
 
     public void UpdateElement(string element)
     {
+        leaveButton.SetActive(false);
         Destroy(printElement);
 
         if (element == "Torch")
