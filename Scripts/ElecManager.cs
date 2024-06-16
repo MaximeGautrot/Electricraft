@@ -97,6 +97,11 @@ public class ElecManager : MonoBehaviour
                                 DeleteGameObjectListeWire();
                                 PlaceWire();
                             }
+                            else if (matrixElements[i, j, k].tag == "Center")
+                            {
+                                DeleteGameObjectListeWire();
+                                PlaceWire();
+                            }
                         }
                     }
                 }
