@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2805,8 +2805,8 @@ MonoBehaviour:
   LeverOff: {fileID: 1258114842866698081, guid: 91250d842887c894184a558a057935eb, type: 3}
   LampOn: {fileID: 3078497302522164111, guid: 0cdaa016e9cd02c4fb6f91dd40b8df0b, type: 3}
   LampOff: {fileID: 8561514312805120721, guid: d7a499f39146b974fa67c189feec45d7, type: 3}
-  CubeTOn: {fileID: 0}
-  CubeTOff: {fileID: 0}
+  CubeTOn: {fileID: 6398845263097580123, guid: 1eff774166a813a4d8293fbced566787, type: 3}
+  CubeTOff: {fileID: 7384707175961974451, guid: 3845a8775c5ecdb44b27eae49be14cb2, type: 3}
   redBall: {fileID: 5639455585832965390, guid: e89822e5cd506684399785f6df1cf64b, type: 3}
   cameraController: {fileID: 609276280}
   currentElement: 
@@ -8675,7 +8675,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4c20de098ef604daa2cb8afb0c647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaveButton: {fileID: 1090916401}
 --- !u!1 &1732325097
 GameObject:
   m_ObjectHideFlags: 0

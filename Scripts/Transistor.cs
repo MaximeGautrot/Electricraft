@@ -6,7 +6,7 @@ public class Transistor : MonoBehaviour
 {
     ////
     protected int id;
-    protected int neighborOnId;
+    protected int neighborOnId = -1;
     ////
     
     protected bool isOn;
@@ -128,5 +128,64 @@ public class Transistor : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public virtual Box GetConnectedBox()
+    {
+        return null;
+    }
+
+    public List<int> FindSourceOn(HashSet<Transistor> visited = null)
+    {
+        if (visited == null)
+        {
+            visited = new HashSet<Transistor>();
+        }
+
+        if (visited.Contains(this))
+        {
+            return new List<int>(); // Boucle détectée, retourne -1
+        }
+
+        visited.Add(this);
+
+        if ((this is Wire) || (this is Relay))
+        {
+            List<int> output = new List<int>();
+            foreach (Transistor neighbor in neighbors)
+            {
+                output.AddRange(neighbor.FindSourceOn(visited));
+            }
+            return output;
+        }
+        else if (this is Box box)
+        {
+            List<int> output = new List<int>();
+            foreach (Transistor neighbor in neighbors)
+            {
+                output.AddRange(neighbor.FindSourceOn(visited));
+            }
+            foreach (Torch t in box.GetTorchConnected())
+            {
+                output.Remove(t.GetId());
+            }
+
+            return output;
+        }
+        else if (this is Lamp)
+        {
+            return new List<int>();
+        }
+        else
+        {
+            if (GetIsOn())
+            {
+                return new List<int>() {GetId()};
+            }
+            else
+            {
+                return new List<int>();
+            }
+        }
     }
 }

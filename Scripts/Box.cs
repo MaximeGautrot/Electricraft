@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Box : Transistor
 {
+    public List<Torch> torchConnected = new List<Torch>();
     // Start is called before the first frame update
     void Start()
     {
@@ -13,41 +14,50 @@ public class Box : Transistor
     // Update is called once per frame
     void Update()
     {
-        uint numberNeighborsOn = 0;
-
-        foreach (Transistor t in neighbors)
+        List<int> sources = FindSourceOn();
+        if(sources.Count == 0)
         {
-            if(t.GetIsOn())
+            if(GetIsOn())
             {
-                if(t is not Box)
-                {
-                    if(t is Torch torch)
-                    {
-                        if(torch.ConnectedBox != this)
-                        {
-                            numberNeighborsOn += 1;
-                            SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
-                        }
-                    }
-                    else
-                    {
-                        if(t.GetNeighborOnId()!=id) //Si le voisin n'est pas lui meme allumé grace a ce fil
-                        {
-                            numberNeighborsOn += 1;
-                            SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
-                        }
-                    }
-                }
-              
+                PowerOff();
             }
-              
         }
-        if(numberNeighborsOn > 0)
+        else
         {
-            PowerOn();
-        }else{
-            PowerOff();
-            SetNeighborOnId(-1);
+            foreach (Transistor t in neighbors)
+            {
+                if (sources.Contains(t.GetId()))
+                {
+                    sources.Remove(t.GetId());
+                }
+            }
+            if(!GetIsOn())
+            {
+                if(sources.Count > 0)
+                {
+                    PowerOn();
+                }
+            }
         }
+    }
+
+    public void AddTorch(Torch t)
+    {
+        torchConnected.Add(t);
+    }
+
+    public void DelTorch(Torch t)
+    {
+        torchConnected.Remove(t);
+    }
+
+    public bool contientTorch(Torch t)
+    {
+        return torchConnected.Contains(t);
+    }
+
+    public List<Torch> GetTorchConnected()
+    {
+        return torchConnected;
     }
 }

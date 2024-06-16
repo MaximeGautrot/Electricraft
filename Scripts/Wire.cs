@@ -15,26 +15,20 @@ public class Wire : Transistor
     // Update is called once per frame
     void Update()
     {
-        uint numberNeighborsOn = 0;
-
-        foreach (Transistor t in neighbors)
+        List<int> sources = FindSourceOn();
+        if(sources.Count == 0)
         {
-            if(t.GetIsOn())
+            if(GetIsOn())
             {
-                if(t.GetNeighborOnId()!=id) //Si le voisin n'est pas lui meme allumé grace a ce fil
-                {
-                    numberNeighborsOn += 1;
-                    SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
-                }
+                PowerOff();
             }
         }
-
-        if(numberNeighborsOn > 0)
+        else
         {
-            PowerOn();
-        }else{
-            PowerOff();
-            SetNeighborOnId(-1);
+            if(!GetIsOn())
+            {
+                PowerOn();
+            }
         }
     }
     //quand on pose un fil sur une case, un point apparait au milieu de cette case puis on doit cliquer sur les cases voisines qui seront connectés a ce fil, pour changer on reclique sur le fil, et pour deselctionné on reclique sur les voisins

@@ -18,9 +18,9 @@ public class Torch : Transistor
         if(ConnectedBox != null)
         {
             if(ConnectedBox.GetIsOn())
-            {
+            {   
                 PowerOff();
-            }else{
+            }else{                
                 PowerOn();
             }
         }else{
@@ -38,7 +38,7 @@ public class Torch : Transistor
         ConnectedBox = null;
     }
 
-    public Box GetConnectedBox()
+    public override Box GetConnectedBox()
     {
         return ConnectedBox;
     }

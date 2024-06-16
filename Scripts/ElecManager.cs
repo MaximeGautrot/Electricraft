@@ -19,6 +19,9 @@ public class ElecManager : MonoBehaviour
     public CubeManager cubeManager;
     public List<GameObject> wireManager;
     public GameObject delaySlider;
+    private Torch connectTorch = null;
+    private Vector3Int torchPosition = new Vector3Int(-10, -10, -10);
+    private Vector3Int boxPosition = new Vector3Int(-10, -10, -10);
 
     // Start is called before the first frame update
     void Start()
@@ -64,8 +67,6 @@ public class ElecManager : MonoBehaviour
                                 GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                                 elt.transform.SetParent(transform);
                                 matrixElements[i, j, k] = elt;
-                                DeleteGameObjectListeWire();
-                                PlaceWire();
                             }
                             else if (matrixElements[i, j, k].tag == "Off" && matrixTransistors[i, j, k].GetLightIsOn())
                             {
@@ -74,21 +75,47 @@ public class ElecManager : MonoBehaviour
                                 GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                                 elt.transform.SetParent(transform);
                                 matrixElements[i, j, k] = elt;
-                                DeleteGameObjectListeWire();
-                                PlaceWire();
                             } 
                         }
                         else
                         {
-                            if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
+                            if (matrixTransistors[i, j, k] is Torch torch)
+                            {
+                                if(torch.GetConnectedBox() != null)
+                                {
+                                    Quaternion rota = GetRotationAngle(GetDirectionBoxTorch(torch));
+                                    if (torch.GetIsOn())
+                                    {
+                                        element = element+"On";
+                                        Destroy(matrixElements[i, j, k]);
+                                        GameObject elt = Instantiate(objectSelected.GetElement(element), torch.GetCenter(), rota);
+                                        elt.transform.SetParent(transform);
+                                        matrixElements[i, j, k] = elt;
+                                    }
+                                    else
+                                    {
+                                        element = element+"Off";
+                                        Destroy(matrixElements[i, j, k]);
+                                        GameObject elt = Instantiate(objectSelected.GetElement(element), torch.GetCenter(), rota);
+                                        elt.transform.SetParent(transform);
+                                        matrixElements[i, j, k] = elt;
+                                    }   
+                                }
+                                else
+                                {
+                                    Destroy(matrixElements[i, j, k]);
+                                    GameObject elt = Instantiate(objectSelected.GetElement(element), torch.GetCenter(), Quaternion.identity);
+                                    elt.transform.SetParent(transform);
+                                    matrixElements[i, j, k] = elt;
+                                }
+                            }
+                            else if (matrixElements[i, j, k].tag == "On" && !matrixTransistors[i, j, k].GetIsOn())
                             {
                                 element = element+"Off";
                                 Destroy(matrixElements[i, j, k]);
                                 GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                                 elt.transform.SetParent(transform);
                                 matrixElements[i, j, k] = elt;
-                                DeleteGameObjectListeWire();
-                                PlaceWire();
                             }
                             else if (matrixElements[i, j, k].tag == "Off" && matrixTransistors[i, j, k].GetIsOn())
                             {
@@ -97,19 +124,18 @@ public class ElecManager : MonoBehaviour
                                 GameObject elt = Instantiate(objectSelected.GetElement(element), matrixTransistors[i, j, k].GetCenter(), Quaternion.identity);
                                 elt.transform.SetParent(transform);
                                 matrixElements[i, j, k] = elt;
-                                DeleteGameObjectListeWire();
-                                PlaceWire();
                             }
                             else if (matrixElements[i, j, k].tag == "Center")
                             {
-                                DeleteGameObjectListeWire();
-                                PlaceWire();
+                                
                             }
                         }
                     }
                 }
             }
         }
+        DeleteGameObjectListeWire();
+        PlaceWire();
     }
 
     void PlaceWire()
@@ -169,9 +195,10 @@ public class ElecManager : MonoBehaviour
 
     void HandleInput()
     {
+        Vector3Int position = cubeManager.GetVector3IntBall();
+        
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Vector3Int position = cubeManager.GetVector3IntBall();
             string element = objectSelected.GetCurrentElement();
             if (element != null)
             {
@@ -182,7 +209,6 @@ public class ElecManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.X))
         {
-            Vector3Int position = cubeManager.GetVector3IntBall();
             if (matrixElements[position.x, position.z, position.y] != null)
             {
                 DeleteTransistor(position.x, position.z, position.y);
@@ -191,9 +217,66 @@ public class ElecManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Vector3Int position = cubeManager.GetVector3IntBall();
             ActiverElement(position.x, position.z, position.y);
         }
+
+        if (Input.GetKeyDown(KeyCode.R) && (connectTorch != null))
+        {
+            connectTorchFunc(position.x, position.z, position.y);
+        }
+    }
+
+    void connectTorchFunc(int i, int j, int k)
+    {
+        if (matrixTransistors[i, j, k] is Torch torch)
+        {
+            connectTorch = torch;
+            torchPosition = new Vector3Int(i, j, k);
+        }
+        else
+        {
+            boxPosition = new Vector3Int(i, j, k);
+            if(IsAdjacent(torchPosition, boxPosition))
+            {
+                Transistor t = matrixTransistors[i, j, k];
+                if(t is Box box)
+                {
+                    if(IsAdjacent(new Vector3Int(i, j, k), torchPosition))
+                    {
+                        if (connectTorch.GetConnectedBox() != null)
+                        {
+                            connectTorch.GetConnectedBox().DelTorch(connectTorch);
+                        }
+                        connectTorch.SetBox(box);
+                        box.AddTorch(connectTorch);
+                        boxPosition = new Vector3Int(-10, -10, -10);
+                        torchPosition = new Vector3Int(-10, -10, -10);
+                    }
+                }
+            }
+        }
+    }
+    
+    bool IsAdjacent(Vector3Int currentPosition, Vector3Int targetPosition)
+    {
+        Vector3Int[] directions = {
+            new Vector3Int(-1, 0, 0),
+            new Vector3Int(1, 0, 0),
+            new Vector3Int(0, -1, 0),
+            new Vector3Int(0, 1, 0),
+            new Vector3Int(0, 0, -1),
+            new Vector3Int(0, 0, 1)
+        };
+
+        foreach (Vector3Int direction in directions)
+        {
+            if (targetPosition == currentPosition + direction)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void ActiverElement(int i, int j, int k)
@@ -393,6 +476,8 @@ public class ElecManager : MonoBehaviour
             torch.SetId(currentId);
             currentId++;
             matrixTransistors[i, j, k] = torch;
+            torchPosition = new Vector3Int(i, j, k);
+            connectTorch = torch;
         }
         else if (element == "Wire")
         {
@@ -429,16 +514,47 @@ public class ElecManager : MonoBehaviour
         }
         else if (element == "CubeT")
         {
-            Box cubeT = new GameObject("Box").AddComponent<Box>();
-            cubeT.SetCenter(center);
-            cubeT.SetId(currentId);
-            currentId++;
-            matrixTransistors[i, j, k] = cubeT;
+            if(boxPosition != new Vector3Int(-10, -10, -10))
+            {
+                if (boxPosition.x == i && boxPosition.z == j && boxPosition.y == k)
+                {
+                    Box cubeT = new GameObject("Box").AddComponent<Box>();
+                    cubeT.SetCenter(center);
+                    cubeT.SetId(currentId);
+                    currentId++;
+                    matrixTransistors[i, j, k] = cubeT;
+                    connectTorch.SetBox(cubeT);
+                    boxPosition = new Vector3Int(-10, -10, -10);
+                    connectTorch = null;
+                }
+            }
+            else
+            {
+                Box cubeT = new GameObject("Box").AddComponent<Box>();
+                cubeT.SetCenter(center);
+                cubeT.SetId(currentId);
+                currentId++;
+                matrixTransistors[i, j, k] = cubeT;
+            }
+            
         }
     }
 
     public void DeleteTransistor(int i, int j, int k)
     {
+        if (matrixTransistors[i, j, k] == connectTorch)
+        {
+            connectTorch = null;
+            boxPosition = new Vector3Int(-10, -10, -10);
+        }
+        else if (matrixTransistors[i, j, k] is Box box)
+        {
+            foreach(Torch t in box.GetTorchConnected())
+            {
+                t.DeleteConnectedBox();
+            }
+        }
+
         Destroy(matrixTransistors[i, j, k]);
         Destroy(matrixElements[i, j, k]);
         matrixTransistors[i, j, k] = null;
@@ -501,4 +617,56 @@ public class ElecManager : MonoBehaviour
         return output;
     }
 
+    public Vector3 GetDirectionBoxTorch(Torch t)
+    {
+        List<Vector3> output = new List<Vector3>();
+        int[,] directions = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
+
+        // Parcourez tous les déplacements possibles
+        for (int d = 0; d < directions.GetLength(0); d++)
+        {
+            // Vérifiez que les coordonnées du voisin sont dans les limites de la matrice
+            Vector3 vectOut = new Vector3(directions[d, 0], directions[d, 2], directions[d, 1]);
+            Vector3 vect = vectOut * 20f;
+            if (Mathf.Approximately((vect + t.GetCenter()).x, t.GetConnectedBox().GetCenter().x) &&
+                Mathf.Approximately((vect + t.GetCenter()).y, t.GetConnectedBox().GetCenter().y) &&
+                Mathf.Approximately((vect + t.GetCenter()).z, t.GetConnectedBox().GetCenter().z))
+            {
+                return vectOut;
+            }
+        }
+    return new Vector3(0, 0, 0);
+}
+    private Quaternion GetRotationAngle(Vector3 direction)
+    {
+        if (direction == Vector3.up)
+        {
+            return Quaternion.Euler(0, 0, -90f);
+        }
+        else if (direction == Vector3.down)
+        {
+            return Quaternion.Euler(0, 0, 90f);
+        }
+        else if (direction == Vector3.left)
+        {
+            return Quaternion.Euler(0, 0, 0);
+        }
+        else if (direction == Vector3.right)
+        {
+            return Quaternion.Euler(0, 180f, 0);
+        }
+        else if (direction == Vector3.forward)
+        {
+            return Quaternion.Euler(0, 90f, 0);
+        }
+        else if (direction == Vector3.back)
+        {
+            return Quaternion.Euler(0, -90f, 0);
+        }
+        else
+        {
+            Debug.LogError("Invalid direction");
+            return Quaternion.Euler(0, 0, 0);
+        }
+    }
 }
