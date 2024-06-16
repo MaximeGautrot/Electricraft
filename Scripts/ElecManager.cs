@@ -7,17 +7,20 @@ public class ElecManager : MonoBehaviour
     public int n1 = 5;
     public int n2 = 5;
     public int n3 = 3;
+    public int delay = 1;
 
     private int currentId = 0;
 
     public Transistor[,,] matrixTransistors = null;
     public GameObject[,,] matrixElements = null;
     public Vector3[,,] matrixVect;
-    // Start is called before the first frame update
+
     public ObjectSelected objectSelected;
     public CubeManager cubeManager;
     public List<GameObject> wireManager;
+    public GameObject delaySlider;
 
+    // Start is called before the first frame update
     void Start()
     {
         matrixTransistors = GenerateTransistorMatrix();
@@ -173,6 +176,7 @@ public class ElecManager : MonoBehaviour
             if (element != null)
             {
                 AddElement(position.x, position.z, position.y, element);
+                
             }
         }
         
@@ -218,7 +222,6 @@ public class ElecManager : MonoBehaviour
             GameObject elt = Instantiate(objectSelected.GetElement(element), position, Quaternion.identity);
             elt.transform.SetParent(transform);
             matrixElements[i, j, k] = elt;
-
             addTransistor(i, j, k, element);
 
             DeleteGameObjectListeWire();
@@ -339,6 +342,10 @@ public class ElecManager : MonoBehaviour
     {
         return n3;
     }
+    public int GetDelay()
+    {
+        return delay;
+    }
     public void SetMyValue1(float value)
     {
         DestroyTransistorMatrix();
@@ -369,6 +376,10 @@ public class ElecManager : MonoBehaviour
         matrixVect = GenerateVectorMatrix();
         matrixElements = GenerateGameObjectMatrix();
     }
+    public void SetMyDelay(float value)
+    {
+        delay = Mathf.RoundToInt(value);
+    }
 
     public void addTransistor(int i, int j, int k, string element)
     {
@@ -397,6 +408,7 @@ public class ElecManager : MonoBehaviour
             button.SetCenter(center);
             button.SetId(currentId);
             currentId++;
+            button.SetPowerDuration(delay);
             matrixTransistors[i, j, k] = button;
         }
         else if (element == "Lever")

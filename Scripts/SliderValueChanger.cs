@@ -7,9 +7,11 @@ public class SliderValueChanger : MonoBehaviour
     public Slider slider1;
     public Slider slider2;
     public Slider slider3;
+    public Slider sliderDelay;
     public TextMeshProUGUI sliderValueText1;
     public TextMeshProUGUI sliderValueText2;
     public TextMeshProUGUI sliderValueText3;
+    public TextMeshProUGUI sliderValueTextDelay;
 
     void Start()
     {
@@ -19,9 +21,12 @@ public class SliderValueChanger : MonoBehaviour
 
         slider3.onValueChanged.AddListener(delegate { ValueChangeCheck3(); });
 
+        sliderDelay.onValueChanged.AddListener(delegate { ValueChangeCheckDelay(); });
+
         slider1.value = elecManager.GetN1();
         slider2.value = elecManager.GetN2();
-        slider1.value = elecManager.GetN3();
+        slider3.value = elecManager.GetN3();
+        sliderDelay.value = elecManager.GetDelay();
 
         UpdateSliderValueText(); // Ajoutez cette ligne
     }
@@ -49,10 +54,17 @@ public class SliderValueChanger : MonoBehaviour
         UpdateSliderValueText(); // Ajoutez cette ligne
     }
 
+    void ValueChangeCheckDelay()
+    {
+        elecManager.SetMyDelay(Mathf.RoundToInt(sliderDelay.value));
+        UpdateSliderValueText(); // Ajoutez cette ligne
+    }
+
     void UpdateSliderValueText() // Ajoutez cette méthode
     {
         sliderValueText1.text = Mathf.RoundToInt(slider1.value).ToString(); // Remplacez "slider1" par le slider que vous souhaitez afficher
         sliderValueText2.text = Mathf.RoundToInt(slider2.value).ToString();
         sliderValueText3.text = Mathf.RoundToInt(slider3.value).ToString();
+        sliderValueTextDelay.text = Mathf.RoundToInt(sliderDelay.value).ToString();
     }
 }
