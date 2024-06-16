@@ -2810,7 +2810,7 @@ MonoBehaviour:
   redBall: {fileID: 5639455585832965390, guid: e89822e5cd506684399785f6df1cf64b, type: 3}
   cameraController: {fileID: 609276280}
   currentElement: 
-  leaveButton: {fileID: 1090916401}
+  delaySlider: {fileID: 1090916401}
 --- !u!1 &435357258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3105,12 +3105,11 @@ MonoBehaviour:
   n1: 5
   n2: 5
   n3: 3
+  delay: 1
   objectSelected: {fileID: 428799507}
   cubeManager: {fileID: 1051092014}
   wireManager: []
   delaySlider: {fileID: 1090916401}
-  boxInfo: {fileID: 0}
-  leaveButton: {fileID: 1090916401}
 --- !u!4 &458846287
 Transform:
   m_ObjectHideFlags: 0
@@ -9318,7 +9317,7 @@ GameObject:
   - component: {fileID: 1839945604}
   - component: {fileID: 1839945605}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: SliderDelay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9529,9 +9528,11 @@ MonoBehaviour:
   slider1: {fileID: 465773260}
   slider2: {fileID: 921377566}
   slider3: {fileID: 2080028923}
+  sliderDelay: {fileID: 1839945605}
   sliderValueText1: {fileID: 1512351256}
   sliderValueText2: {fileID: 1983940084}
   sliderValueText3: {fileID: 900798696}
+  sliderValueTextDelay: {fileID: 237807340}
 --- !u!1 &1878406412
 GameObject:
   m_ObjectHideFlags: 0

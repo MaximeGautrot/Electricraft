@@ -7,6 +7,7 @@ public class ElecManager : MonoBehaviour
     public int n1 = 5;
     public int n2 = 5;
     public int n3 = 3;
+    public int delay = 1;
 
     private int currentId = 0;
 
@@ -18,8 +19,6 @@ public class ElecManager : MonoBehaviour
     public CubeManager cubeManager;
     public List<GameObject> wireManager;
     public GameObject delaySlider;
-    public GameObject boxInfo;
-    public GameObject leaveButton;
 
     // Start is called before the first frame update
     void Start()
@@ -172,6 +171,7 @@ public class ElecManager : MonoBehaviour
             if (element != null)
             {
                 AddElement(position.x, position.z, position.y, element);
+                
             }
         }
         
@@ -180,7 +180,6 @@ public class ElecManager : MonoBehaviour
             Vector3Int position = cubeManager.GetVector3IntBall();
             if (matrixElements[position.x, position.z, position.y] != null)
             {
-                leaveButton.SetActive(false);
                 DeleteTransistor(position.x, position.z, position.y);
             }
         }
@@ -218,24 +217,6 @@ public class ElecManager : MonoBehaviour
             GameObject elt = Instantiate(objectSelected.GetElement(element), position, Quaternion.identity);
             elt.transform.SetParent(transform);
             matrixElements[i, j, k] = elt;
-
-            if (element == "Button" || element == "Relay")
-            {
-                delaySlider.gameObject.SetActive(true);
-            }
-            else
-            {
-                delaySlider.gameObject.SetActive(false);
-            }
-            if (element == "Torch")
-            {
-                boxInfo.gameObject.SetActive(true);
-            }
-            else
-            {
-                boxInfo.gameObject.SetActive(false);
-            }
-
             addTransistor(i, j, k, element);
 
             DeleteGameObjectListeWire();
@@ -356,6 +337,10 @@ public class ElecManager : MonoBehaviour
     {
         return n3;
     }
+    public int GetDelay()
+    {
+        return delay;
+    }
     public void SetMyValue1(float value)
     {
         DestroyTransistorMatrix();
@@ -386,6 +371,10 @@ public class ElecManager : MonoBehaviour
         matrixVect = GenerateVectorMatrix();
         matrixElements = GenerateGameObjectMatrix();
     }
+    public void SetMyDelay(float value)
+    {
+        delay = Mathf.RoundToInt(value);
+    }
 
     public void addTransistor(int i, int j, int k, string element)
     {
@@ -414,6 +403,7 @@ public class ElecManager : MonoBehaviour
             button.SetCenter(center);
             button.SetId(currentId);
             currentId++;
+            button.SetPowerDuration(delay);
             matrixTransistors[i, j, k] = button;
         }
         else if (element == "Lever")

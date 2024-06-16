@@ -27,7 +27,7 @@ public class ObjectSelected : MonoBehaviour
 
     public string currentElement;
 
-    public GameObject leaveButton;
+    public GameObject delaySlider;
 
     void Start()
     {
@@ -53,7 +53,7 @@ public class ObjectSelected : MonoBehaviour
 
     public void UpdateElement(string element)
     {
-        leaveButton.SetActive(false);
+        //leaveButton.SetActive(false);
         Destroy(printElement);
 
         if (element == "Torch")
@@ -90,6 +90,14 @@ public class ObjectSelected : MonoBehaviour
         {
             printElement = Instantiate(redBall, cameraController.GetPositionRedBall(), Quaternion.identity);
             currentElement = null;
+        }
+        if (element == "Button" || element == "Relay")
+        {
+            delaySlider.gameObject.SetActive(true);
+        }
+        else
+        {
+            delaySlider.gameObject.SetActive(false);
         }
 
         printElement.transform.SetParent(transform);
