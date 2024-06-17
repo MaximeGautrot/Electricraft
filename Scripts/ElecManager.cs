@@ -479,6 +479,15 @@ public class ElecManager : MonoBehaviour
             torchPosition = new Vector3Int(i, j, k);
             connectTorch = torch;
         }
+        if (element == "Relay")
+        {
+            Relay relay = new GameObject("Relay").AddComponent<Relay>();
+            relay.SetCenter(center);
+            relay.SetId(currentId);
+            currentId++;
+            relay.SetPowerDelay(delay);
+            matrixTransistors[i, j, k] = relay;
+        }
         else if (element == "Wire")
         {
             Wire wire = new GameObject("Wire").AddComponent<Wire>();

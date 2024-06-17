@@ -149,7 +149,7 @@ public class Transistor : MonoBehaviour
 
         visited.Add(this);
 
-        if ((this is Wire) || (this is Relay))
+        if ((this is Wire))
         {
             List<int> output = new List<int>();
             foreach (Transistor neighbor in neighbors)
@@ -175,6 +175,19 @@ public class Transistor : MonoBehaviour
         else if (this is Lamp)
         {
             return new List<int>();
+        }
+        else if (this is Relay)
+        {
+            List<int> output = new List<int>();
+            foreach (Transistor neighbor in neighbors)
+            {
+                output.AddRange(neighbor.FindSourceOn(visited));
+            }
+            if (GetIsOn())
+            {
+                output.Add(GetId());
+            }
+            return output;
         }
         else
         {

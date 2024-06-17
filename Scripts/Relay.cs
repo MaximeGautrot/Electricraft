@@ -14,24 +14,15 @@ public class Relay : Transistor
     // Update is called once per frame
     void Update()
     {
-        uint numberNeighborsOn = 0;
+        List<int> sources = FindSourceOn();
+        sources.Remove(GetId());
 
-        foreach (Transistor t in neighbors)
-        {
-            if(t.GetIsOn())
-            {
-                if(t.GetNeighborOnId()!=id) //Si le voisin n'est pas lui meme allumé grace a ce fil
-                {
-                    numberNeighborsOn += 1;
-                    SetNeighborOnId(t.GetId()); //On sauvegarde l'id du voisin qui allume ce fil
-                }
-            }
-        }
-
-        if(numberNeighborsOn > 0)
+        if(sources.Count > 0)
         {
             StartCoroutine(DelayTimeOn(powerDelay));
-        }else{
+        }
+        else
+        {
             if(GetIsOn())
             {
                 StartCoroutine(DelayTimeOff(powerDelay));

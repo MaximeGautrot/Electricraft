@@ -19,6 +19,8 @@ public class ObjectSelected : MonoBehaviour
     public GameObject LampOff;
     public GameObject CubeTOn;
     public GameObject CubeTOff;
+    public GameObject RelayOn;
+    public GameObject RelayOff;
     public GameObject redBall;
 
     private GameObject printElement;
@@ -85,6 +87,11 @@ public class ObjectSelected : MonoBehaviour
         {
             printElement = Instantiate(CubeTOff, cameraController.GetPositionRedBall(), Quaternion.identity);
             currentElement = "CubeT";
+        }
+        else if (element == "Relay")
+        {
+            printElement = Instantiate(RelayOff, cameraController.GetPositionRedBall(), Quaternion.identity);
+            currentElement = "Relay";
         }
         else
         {
@@ -188,6 +195,18 @@ public class ObjectSelected : MonoBehaviour
         if (element == "CubeT")
         {
             return CubeTOff;
+        }
+        if (element == "RelayOn")
+        {
+            return RelayOn;
+        }
+        if (element == "RelayOff")
+        {
+            return RelayOff;
+        }
+        if (element == "Relay")
+        {
+            return RelayOff;
         }
         return null;
     }
