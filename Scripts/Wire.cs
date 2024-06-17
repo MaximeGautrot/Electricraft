@@ -25,10 +25,18 @@ public class Wire : Transistor
         }
         else
         {
-            if(!GetIsOn())
+            if (sources.Count > 0)
             {
-                PowerOn();
+                if(!GetIsOn())
+                {
+                    PowerOn();
+                }
             }
+            else if (GetIsOn())
+            {
+                PowerOff();
+            }
+            
         }
     }
     //quand on pose un fil sur une case, un point apparait au milieu de cette case puis on doit cliquer sur les cases voisines qui seront connectés a ce fil, pour changer on reclique sur le fil, et pour deselctionné on reclique sur les voisins

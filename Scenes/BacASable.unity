@@ -2807,6 +2807,8 @@ MonoBehaviour:
   LampOff: {fileID: 8561514312805120721, guid: d7a499f39146b974fa67c189feec45d7, type: 3}
   CubeTOn: {fileID: 6398845263097580123, guid: 1eff774166a813a4d8293fbced566787, type: 3}
   CubeTOff: {fileID: 7384707175961974451, guid: 3845a8775c5ecdb44b27eae49be14cb2, type: 3}
+  RelayOn: {fileID: 2647126006039217307, guid: a49642c551e6eaa43ad63f9ae46be499, type: 3}
+  RelayOff: {fileID: 7712938868159735115, guid: adf56426e969e02408cc5a49e1ba72fd, type: 3}
   redBall: {fileID: 5639455585832965390, guid: e89822e5cd506684399785f6df1cf64b, type: 3}
   cameraController: {fileID: 609276280}
   currentElement: 
@@ -6884,7 +6886,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1274864189}
   m_Direction: 2
   m_Value: 1.0000002
-  m_Size: 0.08031378
+  m_Size: 0.08031377
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

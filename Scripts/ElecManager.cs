@@ -564,6 +564,7 @@ public class ElecManager : MonoBehaviour
             }
         }
 
+        matrixTransistors[i, j, k].PowerOff();
         Destroy(matrixTransistors[i, j, k]);
         Destroy(matrixElements[i, j, k]);
         matrixTransistors[i, j, k] = null;

@@ -135,6 +135,11 @@ public class Transistor : MonoBehaviour
         return null;
     }
 
+    public virtual List<Torch> GetTorchConnected()
+    {
+        return  null;
+    }
+
     public List<int> FindSourceOn(HashSet<Transistor> visited = null)
     {
         if (visited == null)
@@ -165,9 +170,12 @@ public class Transistor : MonoBehaviour
             {
                 output.AddRange(neighbor.FindSourceOn(visited));
             }
-            foreach (Torch t in box.GetTorchConnected())
+            foreach (Transistor t in GetTorchConnected())
             {
-                output.Remove(t.GetId());
+                if (output.Contains(t.GetId()))
+                {
+                    output.Remove(t.GetId());
+                }
             }
 
             return output;
@@ -185,9 +193,12 @@ public class Transistor : MonoBehaviour
             }
             if (GetIsOn())
             {
-                output.Add(GetId());
+                return new List<int>() {GetId()};
             }
-            return output;
+            else
+            {
+                return new List<int>();
+            }
         }
         else
         {
@@ -201,4 +212,116 @@ public class Transistor : MonoBehaviour
             }
         }
     }
+
+    public List<Relay> FindRelay(HashSet<Transistor> visited = null)
+    {
+        if (visited == null)
+        {
+            visited = new HashSet<Transistor>();
+        }
+
+        if (visited.Contains(this))
+        {
+            return new List<Relay>(); // Boucle détectée, retourne -1
+        }
+
+        visited.Add(this);
+
+        if ((this is Wire))
+        {
+            List<Relay> output = new List<Relay>();
+            foreach (Transistor neighbor in neighbors)
+            {
+                output.AddRange(neighbor.FindRelay(visited));
+            }
+            return output;
+        }
+        else if (this is Box box)
+        {
+            List<Relay> output = new List<Relay>();
+            foreach (Transistor neighbor in neighbors)
+            {
+                if (neighbor is Torch t)
+                {
+                    if (!GetTorchConnected().Contains(t))
+                    {
+                        output.AddRange(neighbor.FindRelay(visited));
+                    }
+                }
+            }
+            return output;
+        }
+        else if (this is Lamp)
+        {
+            return new List<Relay>();
+        }
+        else if (this is Relay relay)
+        {
+            return new List<Relay>() {relay};
+        }
+        else
+        {
+            return new List<Relay>();
+        }
+    }
+
+    public Transistor FindFirstSource(Transistor start)
+    {
+        HashSet<Transistor> visited = new HashSet<Transistor>();
+        Queue<Transistor> queue = new Queue<Transistor>();
+        queue.Enqueue(this);
+        visited.Add(this);
+
+        while (queue.Count > 0)
+        {
+            Transistor current = queue.Dequeue();
+
+            if (current is Relay relay)
+            {
+                if (current != this)
+                {
+                    if (current.GetIsOn() && relay.GetTransiPowerOn() != start)
+                    {
+                        return current;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                }
+            }
+            else if(current is Button || current is Lever || current is Torch)
+            {
+                if (current.GetIsOn())
+                {
+                    return current;
+                }
+            }
+
+            foreach (Transistor neighbor in current.neighbors)
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+
+            if (current is Box box)
+            {
+                foreach (Transistor t in box.GetTorchConnected())
+                {
+                    if (!visited.Contains(t))
+                    {
+                        visited.Add(t);
+                        queue.Enqueue(t);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
 }

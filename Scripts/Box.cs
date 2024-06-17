@@ -24,7 +24,7 @@ public class Box : Transistor
         }
         else
         {
-            foreach (Transistor t in neighbors)
+            foreach (Transistor t in GetTorchConnected())
             {
                 if (sources.Contains(t.GetId()))
                 {
@@ -56,7 +56,7 @@ public class Box : Transistor
         return torchConnected.Contains(t);
     }
 
-    public List<Torch> GetTorchConnected()
+    public override List<Torch> GetTorchConnected()
     {
         return torchConnected;
     }

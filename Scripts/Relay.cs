@@ -5,6 +5,9 @@ using UnityEngine;
 public class Relay : Transistor
 {
     [SerializeField] private int powerDelay;
+
+    private List<Transistor> poweredNeighbors = new List<Transistor>();
+    private Transistor transiPowerOn = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +17,24 @@ public class Relay : Transistor
     // Update is called once per frame
     void Update()
     {
-        List<int> sources = FindSourceOn();
+        if(!GetIsOn())
+        {
+            transiPowerOn = FindFirstSource(this);
+            if (transiPowerOn != null)
+            {
+                StartCoroutine(DelayTimeOn(powerDelay));
+            }
+        }
+        else
+        {
+            if (!transiPowerOn.GetIsOn())
+            {
+                StartCoroutine(DelayTimeOff(powerDelay));
+            }
+        }
+
+        
+        /*List<int> sources = FindSourceOn();
         sources.Remove(GetId());
 
         if(sources.Count > 0)
@@ -27,7 +47,7 @@ public class Relay : Transistor
             {
                 StartCoroutine(DelayTimeOff(powerDelay));
             }
-        }
+        }*/
     }
     private IEnumerator DelayTimeOn(int time)
     {
@@ -47,5 +67,14 @@ public class Relay : Transistor
     public int GetPowerDelay()
     {
         return powerDelay;
+    }
+    public List<Transistor> GetPoweredNeighbors()
+    {
+        return poweredNeighbors;
+    }
+
+    public Transistor GetTransiPowerOn()
+    {
+        return transiPowerOn;
     }
 }
